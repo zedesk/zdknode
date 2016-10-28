@@ -12,3 +12,4 @@ WORKDIR "/app"
 VOLUME ["/app","/home/web"]
 
 ENTRYPOINT ["npm"]
+CMD ["start"]
