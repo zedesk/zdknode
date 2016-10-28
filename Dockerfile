@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.3.1
+FROM mhart/alpine-node:6.9.1
 
 RUN apk add -U --virtual tools git sudo && \
     adduser -D web && \
