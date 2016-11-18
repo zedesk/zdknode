@@ -1,0 +1,31 @@
+#!/bin/bash
+
+while getopts ":p:d" opt; do
+    case $opt in
+       d)
+          DAEMON=1
+          ;;
+       p)
+          PORT=$OPTARG
+          ;;
+    esac
+done
+
+# get remaining args
+shift $(expr $OPTIND - 1 )
+
+NAME=$(basename $PWD)
+CMD='docker run '
+
+if [[ $DAEMON ]]; then
+  CMD+=' -d -v '$PWD':/app --name '$NAME
+else
+  CMD+=' -it --rm -v '$PWD':/app --name '$NAME
+fi
+
+if [[ $PORT ]]; then
+   CMD+=' -p '${PORT}
+fi
+
+${CMD} zdknode $@
+
