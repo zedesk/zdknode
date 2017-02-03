@@ -1,4 +1,6 @@
-FROM mhart/alpine-node:6.9.1
+FROM mhart/alpine-node:6.9.5
+
+LABEL maintainer "fabrice.lecoz@zedesk.net"
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
     adduser -D web -s /bin/bash && \
@@ -11,6 +13,8 @@ USER web
 WORKDIR "/app"
 
 VOLUME ["/app","/home/web"]
+
+EXPOSE 8080
 
 ENTRYPOINT ["npm"]
 CMD ["start"]
