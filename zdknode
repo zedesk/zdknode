@@ -1,49 +1,70 @@
 #!/bin/bash
 
-while getopts ":p:d" opt; do
+while getopts HDV:P: opt; do
     case $opt in
-       d)
-          DAEMON=1
-          ;;
-       p)
-          PORT=$OPTARG
-          ;;
+      H)
+        MOUNTHOME=1
+        ;;
+      D)
+        DAEMON=1
+        ;;
+      V)
+        VERSION=$OPTARG
+        ;;
+      P)
+        PORT=$OPTARG
+        ;;
+      \?)
+        break
+        ;;
     esac
 done
+
+if [ -z $VERSION ]; then
+  AVAILABLE=$(docker image ls --format "{{.Tag}}" zedesk/zdknode)
+  VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
+fi
 
 # get remaining args
 shift $(expr $OPTIND - 1 )
 
-NAME=$(basename $PWD)
-CMD='docker run '
-EXISTS=$(docker ps -a --format="{{.Names}}" | grep ${NAME})
+APPNAME=$(basename $PWD)
 
-if [ ! -z $EXISTS ]; then
-    if [ $# != 0 ]; then
-        if [ $1 == 'stop' ]; then
-            docker rm -fv $NAME
-            exit 0
-        fi
-        DOCKERCMD='docker exec -it '$NAME' npm'
-        ${DOCKERCMD} $@
-	exit 0
-    else
-        echo "already running, need a npm command"
-        exit 1
-    fi
-fi
+function EXISTS {
+  echo '"'$(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")'"'
+}
 
-if [[ $DAEMON ]]; then
-  CMD+=' -d -v '$PWD':/app --name '$NAME
-else
-  CMD+=' -it --rm -v '$PWD':/app --name '$NAME
-fi
+echo $VERSION
+echo $(EXISTS)
+
+# EXISTS=$(docker ps -a --format="{{.Names}}" | grep ${NAME})
 
 if [[ $PORT ]]; then
-   CMD+=' -p '${PORT}':8080'
+   PORTOPT=' -p '${PORT}':8080'
 else
-   CMD+=' -p 8080'
+   PORTOPT=' -p 8080:8080'
 fi
 
-${CMD} zdknode $@
+if [ "" == $(EXISTS) ]; then
+  echo "create docker"
+  DOCKERCMD='docker run '
+  OPTION='-v '$PWD':/app '$PORTOPT' --name '$APPNAME
+  if [[ $DAEMON ]]; then
+    OPTION=' -d '$OPTION
+  else
+    OPTION=' -it --rm '$OPTION
+  fi
+  if [[ $MOUNTHOME ]]; then
+    OPTION+=' -v '$HOME':/home/web'
+  fi
 
+  ${DOCKERCMD} ${OPTION} zedesk/zdknode:${VERSION} $@
+else
+  if [ $# != 0 ]; then
+    DOCKERCMD='docker exec -it '$APPNAME' npm'
+    ${DOCKERCMD} $@
+  else
+    echo "container ${APPNAME} already running : need a command"
+    exit 1
+  fi
+fi
