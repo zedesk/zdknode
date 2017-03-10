@@ -13,10 +13,6 @@ some pkgs has been added to facilitate web development :
   - sudo : to do some operation as root ( only for dev purpose )
   - bash : a more useful shell
 
-global npm package :
-
-  - yarn : a node package manager
-
 The container expose 2 volumes :
 
  - /app : the directory where your sources will be shared
