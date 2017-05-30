@@ -15,6 +15,8 @@ WORKDIR "/app"
 VOLUME ["/app","/home/web"]
 
 EXPOSE 8080
+EXPOSE 9229
+EXPOSE 5858
 
 ENTRYPOINT ["npm"]
 CMD ["start"]
