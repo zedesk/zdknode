@@ -12,7 +12,7 @@ RUN echo "prefix=/app/.npm-packages" > ~/.npmrc
 
 WORKDIR "/app"
 
-VOLUME ["/app","/home/web"]
+VOLUME ["/app","/home/node"]
 
 EXPOSE 8080
 EXPOSE 9229
