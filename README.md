@@ -1,51 +1,69 @@
 # zdknode : A nodejs dev environment
 
-A node docker based on mhart/alpine-node to help development.
+A node docker based on [official node image][1] to help development.
 
-The goal of this image, is to provide a nodejs dev environment, without complicated install on your machine. You just need to install docker.
+The goal of this image, is to provide a nodejs dev environment, without complicated install on your machine. You just need to install docker, and pull the image.
 
-the entrypoint of the container is npm
+The entrypoint of the container is npm, which is much more useful.
 
-some pkgs has been added to facilitate web development :
+Some pkgs has been added to facilitate web development :
 
   - git : needed for bower or some npm install from git repositories
   - openssh-client : used by git+ssh
-  - sudo : to do some operation as root ( only for dev purpose )
-  - bash : a more useful shell
 
 The container expose 2 volumes :
 
  - /app : the directory where your sources will be shared
- - /home/web : the user directory, useful to share ssh keys or other secrets like '.npmrc'
+ - /home/node : the user directory, useful to share ssh keys or other secrets like '.npmrc'
 
 # dev usage
 
 ## init : create a new project
 
     mkdir myAwesomeSite && cd $_
-    docker run --rm -it -v $PWD:/app /home/web zdknode init
+    docker run --rm -it -v $PWD:/app zedesk/zdknode init
 
-the flag `-i` is important here, as the npm init command is interactive
+> __Nota :__ the `-it` is important in the command above, as `npm init` is interactive
 
-## adding dependencies
+## Adding dependencies
 
-    docker run --rm -it -v $PWD:/app zdknode i supervisor -D
+### Project dependencies
 
-the `-t` flag could be useful here, to follow the installation of the package. Without this flag, you will see only the result after the installation, which could be long with npm...
+Install dependencies as usual, for example :
+
+```bash
+docker run --rm -v $PWD:/app zdknode i supervisor -D
+```
+
+### Global dependencies
+
+```bash
+docker run --rm -v $PWD/test:/app zedesk/zdknode i bower -g
+docker run --rm -v $PWD/test:/app zedesk/zdknode ls -g --depth=0
+```
+
+Global packages are installed into the `.npm-packages` directory into your shared sources folder.
+
+```
+/app/.npm-packages/lib
+`-- bower@1.8.0
+```
 
 ## start
 
-    docker run --rm -v $PWD:/app --name my-app -p 8080:80 zdknode
+To start a web application, the image exposes the port 8080, so it's recommended to use it.
 
-There's no port explicitly exposed by the zdknode image. It's your convenience to publish the port of your application.
+> __Nota :__ As the default user of the container is `node`, the port 80 is not available, you should use a port number over 1024.
+
+```bash
+docker run --rm -v $PWD:/app --name my-app -p 8080:80 zdknode
+```
 
 ## adding dependencies while running
 
-    docker exec -it my-app npm i a_package -S
-
-    or you can also use yarn
-
-    docker exec -it my-app yarn add a_package
+```
+docker exec -it my-app npm i a_package -S
+```
 
 if you install devDependencies command line cli like bower, add it as a script into your package.json file.
 
@@ -58,3 +76,5 @@ if you install devDependencies command line cli like bower, add it as a script i
 therefore, accessing bower cli could be done for example so :
 
     docker exec -it my-app npm run bower install
+
+[1]: https://hub.docker.com/_/node/
