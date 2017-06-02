@@ -1,16 +1,16 @@
-FROM node:6.10.3-alpine
+FROM node:8.0.0-alpine
 
 RUN apk add -U --no-cache git openssh-client
 
 LABEL MAINTAINER="fabrice.lecoz@zedesk.net" \
-      NODE_VERSION="6.10.3" \
-      NPM_VERSION="3.10.10"
+      NODE_VERSION=$NODE_VERSION \
+      YARN_VERSION=$YARN_VERSION
 
 USER node
+WORKDIR "/app"
+
 ENV PATH /app/.npm-packages/bin:$PATH
 RUN echo "prefix=/app/.npm-packages" > ~/.npmrc
-
-WORKDIR "/app"
 
 VOLUME ["/app","/home/node"]
 
