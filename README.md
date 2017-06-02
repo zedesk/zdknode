@@ -16,6 +16,14 @@ The container expose 2 volumes :
  - /app : the directory where your sources will be shared
  - /home/node : the user directory, useful to share ssh keys or other secrets like '.npmrc'
 
+ The image expose by default the follwing ports :
+
+  - 8080 : used to expose a http service
+  - 5858 : node debug port
+  - 9229 : node inspect port
+
+The container use internally the `node` user ( uid=1000, gid=1000 ) to run the npm scripts commands. So, services started by npm scripts could only use port beyond 1024.
+
 # dev usage
 
 ## init : create a new project
