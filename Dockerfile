@@ -1,18 +1,22 @@
-FROM mhart/alpine-node:6.10.0
+FROM node:6.10.3-alpine
 
-LABEL maintainer "fabrice.lecoz@zedesk.net"
-RUN apk add -U --virtual tools git sudo bash openssh-client && \
-    adduser -D web -s /bin/bash && \
-    install -d /app -m 744 -o web && \
-    echo "web   ALL=(ALL:ALL)	NOPASSWD:	ALL " > /etc/sudoers.d/web
+RUN apk add -U --no-cache git openssh-client
 
-# Drop privileges
-USER web
+LABEL MAINTAINER="fabrice.lecoz@zedesk.net" \
+      NODE_VERSION=$NODE_VERSION \
+      YARN_VERSION=$YARN_VERSION
+
+USER node
 WORKDIR "/app"
 
-VOLUME ["/app","/home/web"]
+ENV PATH /app/.npm-packages/bin:$PATH
+RUN echo "prefix=/app/.npm-packages" > ~/.npmrc
+
+VOLUME ["/app","/home/node"]
 
 EXPOSE 8080
+EXPOSE 9229
+EXPOSE 5858
 
 ENTRYPOINT ["npm"]
 CMD ["start"]
