@@ -94,4 +94,4 @@ therefore, accessing bower cli could be done for example so :
 
 [1]: https://hub.docker.com/_/node/
 [2]: https://github.com/zedesk/zdknode/blob/6.10.3/Dockerfile
-[2]: https://github.com/zedesk/zdknode/blob/8.0.0/Dockerfile
+[3]: https://github.com/zedesk/zdknode/blob/8.0.0/Dockerfile
