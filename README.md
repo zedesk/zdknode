@@ -4,6 +4,12 @@ A node docker based on [official node image][1] to help development.
 
 The goal of this image, is to provide a nodejs dev environment, without complicated install on your machine. You just need to install docker, and pull the image.
 
+## Supported tags and respective Dockerfile links
+
+ - [6.10, 6.10.3][2]
+
+## Information
+
 The entrypoint of the container is npm, which is much more useful.
 
 Some pkgs has been added to facilitate web development :
@@ -86,3 +92,4 @@ therefore, accessing bower cli could be done for example so :
     docker exec -it my-app npm run bower install
 
 [1]: https://hub.docker.com/_/node/
+[2]: https://github.com/zedesk/zdknode/blob/6.18.3/Dockerfile
