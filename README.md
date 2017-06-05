@@ -92,4 +92,4 @@ therefore, accessing bower cli could be done for example so :
     docker exec -it my-app npm run bower install
 
 [1]: https://hub.docker.com/_/node/
-[2]: https://github.com/zedesk/zdknode/blob/6.18.3/Dockerfile
+[2]: https://github.com/zedesk/zdknode/blob/6.10.3/Dockerfile
