@@ -6,7 +6,7 @@ The goal of this image, is to provide a nodejs dev environment, without complica
 
 ## Supported tags and respective Dockerfile links
 
- - [8.0, 8.0.0, latest][3]
+ - [8, 8.6, 8.6.0][3]
  - [6.10, 6.10.3][2]
 
 ## Information
@@ -94,4 +94,4 @@ therefore, accessing bower cli could be done for example so :
 
 [1]: https://hub.docker.com/_/node/
 [2]: https://github.com/zedesk/zdknode/blob/6.10.3/Dockerfile
-[3]: https://github.com/zedesk/zdknode/blob/8.0.0/Dockerfile
+[3]: https://github.com/zedesk/zdknode/blob/8.6.0/Dockerfile
